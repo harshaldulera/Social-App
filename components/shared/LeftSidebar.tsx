@@ -1,6 +1,10 @@
 function LeftsSidebar () {
     return (
-        <h1>LeftsSidebar</h1>
+        <section className="custom-scrollbar leftsidebar">
+            <div className="flex w-full flex-1 flex-col gap-6 px-6">
+                
+            </div>
+        </section>
     )
 }
 
