@@ -17,6 +17,7 @@ import { UserValidation } from '@/lib/validations/user';
 import * as z from "zod";
 import { User } from '@clerk/nextjs/server';
 import Image from 'next/image';
+import { ChangeEvent } from 'react';
 
 interface Props {
     user: {
@@ -41,7 +42,11 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
         }
     })
 
-    function onSubmit(values: z.infer<typeof UserValidationehkvromju>) {
+    const handleImage = (e: ChangeEvent, fieldChange: (value: string) => void ) => {
+        e.preventDefault();
+    }
+
+    function onSubmit(values: z.infer<typeof UserValidation>) {
         console.log(values)
     }
 
