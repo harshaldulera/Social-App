@@ -75,8 +75,14 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
                                         />
                                     )}
                                 </FormLabel>
-                                <FormControl>
-                                    <Input placeholder="shadcn" {...field} />
+                                <FormControl className="flex-1 text-base-semibold text-grey-200">
+                                    <Input 
+                                        type="file"
+                                        accept="image/*"
+                                        placeholder="Upload a photo"
+                                        className="account-form_image-input"
+                                        onChange={(e) => handleImage(e, field.onChange)}
+                                    />
                                 </FormControl>
                                 <FormDescription>
                                     This is your public display name.
