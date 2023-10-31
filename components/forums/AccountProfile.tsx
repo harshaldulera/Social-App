@@ -46,12 +46,14 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
         }
     })
 
-    const handleImage = (e: ChangeEvent<HTMLInputElement>, fieldChange: (value: string) => void ) => {
+    const handleImage = (
+        e: ChangeEvent<HTMLInputElement>, 
+        fieldChange: (value: string) => void ) => {
         e.preventDefault();
 
         const fileReader = new FileReader();
 
-        if(e.target.files && e.target.files.length > 1) {
+        if(e.target.files && e.target.files.length > 0 ) {
             const file = e.target.files[0];
 
             setFiles(Array.from(e.target.files));
@@ -67,7 +69,9 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
     }
 
     function onSubmit(values: z.infer<typeof UserValidation>) {
-        console.log(values)
+        const blob = values.profile_photo;
+
+        const hasImageChanged = isBase64Image(blob);
     }
 
     return (
