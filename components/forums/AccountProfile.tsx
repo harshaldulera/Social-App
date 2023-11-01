@@ -20,6 +20,8 @@ import Image from 'next/image';
 import { ChangeEvent, useState } from 'react';
 import { Textarea } from '@/components/ui/textarea'
 import { eventNames } from 'process';
+import { isBase64Image } from '@/lib/utils';
+import from { useUploadThing } '@/lib/uploadthing';
 
 interface Props {
     user: {
@@ -72,6 +74,10 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
         const blob = values.profile_photo;
 
         const hasImageChanged = isBase64Image(blob);
+
+        if(hasImageChanged) {
+            const imgRes = 
+        }
     }
 
     return (
