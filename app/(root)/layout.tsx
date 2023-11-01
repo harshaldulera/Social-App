@@ -4,8 +4,8 @@ import '../globals.css'
 import { ClerkProvider } from '@clerk/nextjs'
 
 import Topbar from '@/components/shared/Topbar'
-import LeftsSidebar from '@/components/shared/Leftsidebar'
-import RightSidebar from '@/components/shared/Rightsidebar'
+import LeftsSidebar from '@/components/shared/LeftSidebar'
+import RightSidebar from '@/components/shared/RightSidebar'
 import Bottombar from '@/components/shared/Bottombar'
 
 const inter = Inter({ subsets: ['latin'] })
