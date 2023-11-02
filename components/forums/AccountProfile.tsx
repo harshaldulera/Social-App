@@ -96,6 +96,12 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
             bio: values.bio,
             image: values.profile_photo,
         });
+
+        if (pathname === '/profile/edit'){
+            router.back();
+        } else {
+            router.push('/');
+        }
     };
 
     return (
