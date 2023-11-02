@@ -1,3 +1,4 @@
+import PostThread from "@/components/forums/PostThreads";
 import { fetchUser } from "@/lib/actions/user.actions";
 import { currentUser } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
@@ -13,7 +14,11 @@ async function Page() {
     if (!userInfo?.onboarded) redirect("/onboarding");
 
     return (
-        <h1 className="head-text">Create Thread</h1>
+        <>
+            <h1 className="head-text">Create Thread</h1>
+
+            <PostThread userId={userInfo._id} />
+        </>
     )
 }   
 
