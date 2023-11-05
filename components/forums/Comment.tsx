@@ -1,8 +1,10 @@
 "use client";
 
 import * as z from "zod";
+import Image from "next/image";
+import { usePathname } from 'next/navigation';
 import { useForm } from "react-hook-form";
-import { Button } from '@/components/ui/button';
+import { zodResolver } from '@hookform/resolvers/zod';
 import {
     Form,
     FormControl,
@@ -12,11 +14,9 @@ import {
     FormLabel,
     FormMessage,
 }  from '@/components/ui/form'
-import { zodResolver } from '@hookform/resolvers/zod';
-import { usePathname, useRouter } from 'next/navigation';
-import { CommentValidation } from "@/lib/validations/thread";
+import { Button } from '@/components/ui/button';
 import { Input } from "../ui/input";
-import Image from "next/image";
+import { CommentValidation } from "@/lib/validations/thread";
 import { addCommentToThread } from "@/lib/actions/thread.actions";
 // import { createThread } from "@/lib/actions/thread.actions";
 

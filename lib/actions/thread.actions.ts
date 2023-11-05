@@ -12,27 +12,6 @@ interface Params {
     path: string,
 }
 
-export async function createThread ({ text, author, communityId, path }: Params) {
-    try {
-        connectToDB();
-
-        const createThread = await Thread.create({
-            text,
-            author,
-            community: null,
-        });
-    
-        //Update user model
-        await User.findByIdAndUpdate(author, {
-            $push: { threads: createThread._id }
-        })
-    
-        revalidatePath(path);
-    } catch (error: any) {
-        throw new Error (`Error creating thread: ${error.message}`)
-    }
-};
-
 export async function fetchPosts(pageNumber = 1, pageSize = 20) {
     connectToDB();
 
@@ -50,8 +29,8 @@ export async function fetchPosts(pageNumber = 1, pageSize = 20) {
                 path: 'author',
                 model: User,
                 select: "_id name parentId image"
-            } 
-        })
+            },
+        });
 
         const totalPostsCount = await Thread.countDocuments({ parentId: { $in: [null, undefined] } })
 
@@ -61,6 +40,28 @@ export async function fetchPosts(pageNumber = 1, pageSize = 20) {
 
         return { posts, isNext };
 }
+
+export async function createThread ({ text, author, communityId, path }: Params) {
+    try {
+        connectToDB();
+
+        const createThread = await Thread.create({
+            text,
+            author,
+            community: null,
+        });
+    
+        //Update user model
+        await User.findByIdAndUpdate(author, {
+            $push: { threads: createThread._id }
+        });
+    
+        revalidatePath(path);
+    } catch (error: any) {
+        throw new Error (`Error creating thread: ${error.message}`)
+    }
+};
+
 
 export async function fetchThreadById(id: string) {
     connectToDB();
@@ -89,9 +90,9 @@ export async function fetchThreadById(id: string) {
                             path: 'author',
                             model: User,
                             select: "_id id name parentId image"
-                        }
-                    }
-                ]
+                        },
+                    },
+                ],
             }).exec();
 
             return thread;
