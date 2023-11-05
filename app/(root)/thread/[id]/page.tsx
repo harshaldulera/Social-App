@@ -34,7 +34,7 @@ async function page({ params }: { params: { id: string } }) {
             <div className="mt-7">
                 <Comment
                     threadId={thread.id}
-                    currentUserImg={user.imageUrl}
+                    currentUserImg={userInfo.image}
                     currentUserId={JSON.stringify(userInfo._id)}
                 />
             </div>
@@ -50,7 +50,7 @@ async function page({ params }: { params: { id: string } }) {
                         community={childItem.community}
                         createdAt={childItem.createdAt}
                         comments={childItem.children} 
-                        isComment={true}
+                        isComment
                     />
                 ))}
             </div>
