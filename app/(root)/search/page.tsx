@@ -14,6 +14,9 @@ async function page () {
 
     const userInfo = await fetchUser(user.id);
     if(!userInfo?.onboarded) redirect("/onboarding");  
+
+    //Fetch all users
+    
     return (
         <section>
             <h1 className="head-text mb-10">Search</h1>
