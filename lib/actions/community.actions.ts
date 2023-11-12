@@ -18,5 +18,20 @@ export async function createCommunity (
         connectToDB();
 
         const user = await User.findOne({ id: createdById });
+
+        if(!user) {
+            thwor new Error("User not Found");
+        }
+
+        const newCommunity = new Community({
+            id,
+            name,
+            username,
+            image,
+            bio,
+            createdBy: user._id
+        });
+
+        const createdCommunity = await newCommunity.save();
     }
 }
