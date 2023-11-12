@@ -132,7 +132,7 @@ export const POST = async (request: Request) => {
 
     if (eventType === "organization.updated") {
         try {
-            const {id, logo_url, name, slug } = evnt?.data;
+            const { id, logo_url, name, slug } = evnt?.data;
             console.log("updated", evnt?.data);
 
             await updateCommunityInfo(id, name, slug, logo_url);
@@ -151,5 +151,5 @@ export const POST = async (request: Request) => {
         }
     }
 
-    
+
 }
