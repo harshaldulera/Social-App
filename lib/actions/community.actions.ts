@@ -64,3 +64,36 @@ export async function fetchCommunityDetails(id: string) {
         throw error;
     }
 }
+
+export async function fetchCommunityPosts(id: string) {
+    try {
+        connectToDB();
+
+        const communityPosts = await Community.findById(id).populate({
+            path: "threads",
+            model: Thread,
+            populate: [
+                {
+                    path: "author",
+                    model: User,
+                    select: "name image id",
+                },
+                {
+                    path: "children",
+                    model: Thread,
+                    populate: {
+                        path: "author",
+                        model: User,
+                        select: "name image id",
+                    },
+                },
+            ],
+        });
+
+        return communityPosts;
+
+    } catch (error) {
+        console.error("Error fetching community posts: ", error);
+        throw error;
+    }
+}
