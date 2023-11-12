@@ -43,3 +43,24 @@ export async function createCommunity (
         throw error;
     }
 }
+
+export async function fetchCommunityDetails(id: string) {
+    try {
+        connectToDB();
+
+        const communityDetails = await Community.findOne({ id }).populate([ "createdBy",
+            {
+                path: "members",
+                model: User,
+                select: "name username image _id id",
+            },
+        ]);
+
+        return communityDetails;
+
+
+    } catch (error: any) {
+        console.error("Error fetching community details: ", error);
+        throw error;
+    }
+}
