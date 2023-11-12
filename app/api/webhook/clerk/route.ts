@@ -27,11 +27,66 @@ type Event = {
 export const POST = async (request: Request) => {
     const payload = await request.json();
     const header = headers();
-    
+
     const heads = {
         "svix-id": header.get("svix-id"),
         "svix-timestamp": headers.get("svix-timestamp"),
         "svix-signature": headers.get("svix-signature"),
     };
+
+    const wh = new Webhook(process.env.NEXT_CLERK_WEBHOOK_SECRET || "");
+
+    let evnt: Event | null = null;
+
+    try {
+        evnt = wh.verify{
+            JSON.stringify(payload),
+            heads as IncomingHttpHeaders & WebhookRequiredHeaders,
+        } as Event;
+    } catch (err) {
+        return NextResponse.json({ message: err }, { status: 400});
+    }
+
+    const eventType: EventType = evnt?.type!;
+
+    if (eventType === 'organization.created'){
+        const { id, name, slug, logo_url, image_url, created_by } = evnt.data ?? {};
+
+        try {
+            await createCommunity(
+                id,
+                name,
+                slug,
+                logo_url || image_url,
+                "org bio",
+                created_by
+            );
+
+            return NextResponse.json({ message: "User Created" }, { status: 201 });
+        } catch (err) {
+            console.log(err);
+            return NextResponse.json(
+                { message: "Internal Server Error" },
+                { status: 500 }
+            );
+        }
+    }
+
+    if (eventType === "organizationInvitation.created") {
+        try {
+            console.log("Invitation Created", evnt?.data);
+
+            return NextResponse.json(
+                { message: "Invitation Created" },
+                { status: 201}
+            );
+        } catch (err) {
+            console.log(err);
+            return NextResponse.json(
+                { message: "Internal Server Error" },
+                { status: 500 }
+            );
+        }
+    }
     
 }
