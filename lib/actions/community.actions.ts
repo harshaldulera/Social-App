@@ -20,7 +20,7 @@ export async function createCommunity (
         const user = await User.findOne({ id: createdById });
 
         if(!user) {
-            thwor new Error("User not Found");
+            throw new Error("User not Found");
         }
 
         const newCommunity = new Community({
@@ -33,5 +33,13 @@ export async function createCommunity (
         });
 
         const createdCommunity = await newCommunity.save();
+
+        user.communities.push(createdCommunity._id);
+        await user.save();
+
+        return createdCommunity;
+    } catch (error: any) {
+        console.error("Error creating community: ", error);
+        throw error;
     }
 }
