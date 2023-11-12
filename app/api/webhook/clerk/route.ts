@@ -89,4 +89,67 @@ export const POST = async (request: Request) => {
         }
     }
     
+    if (eventType === "organizationMembership.created") {
+        try {
+            const { organization, public_user_data } = evnt?.data;
+            console.log("created", evnt?.data);
+
+            await addMemberToCommunity(organization.id, public_user_data.id);
+
+            return NextResponse.json(
+                { message: "Member Accepted" },
+                { status: 201 }
+            );
+        } catch (err) {
+            console.log(err);
+            return NextResponse.json(
+                { message: "Internal Server Error" },
+                { status: 500 }
+            );
+        }
+    }
+
+    if (eventType === "organizationMembership.deleted") {
+        try {
+            const { organization, public_user_data } = evnt?.data;
+            console.log("removed", ennt?.data);
+
+            await removeUserFromCommunity(public_user_data.user_id, organization.id);
+
+            return NextResponse.json(
+                { message: "Member Removed" },
+                { status: 201 }
+            )
+        } catch (err) {
+            console.log(err);
+
+            return NextResponse.json(
+                { message: "Internal Server Error" },
+                { status: 500 }
+            );
+        }
+    }
+
+    if (eventType === "organization.updated") {
+        try {
+            const {id, logo_url, name, slug } = evnt?.data;
+            console.log("updated", evnt?.data);
+
+            await updateCommunityInfo(id, name, slug, logo_url);
+
+            return NextResponse.json(
+                { message: "Community Updated" },
+                { status: 201 }
+            );
+        } catch (err) {
+            console.log(err);
+
+            return NextResponse.json(
+                { message: "Internal Server Error" },
+                { status: 500 }
+            );
+        }
+    }
+
+    
 }
