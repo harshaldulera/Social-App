@@ -145,3 +145,39 @@ export async function fetchCommunities({
         throw error;
     }
 }
+
+export async function addMemberToCommunity(
+    communityId: string,
+    memberId: string
+) {
+    try {
+        connectToDB();
+
+        const community = await Community.findOne({ id: communityId });
+
+        if (!community) {
+            throw new Error("Community not found");
+        }
+
+        const user = await User.findOne({ id: memberId });
+
+        if(!user) {
+            throw new Error("User not found");
+        }
+
+        if(community.members.includes(user._id)) {
+            throw new Error ("User is already a member of the community");
+        }
+
+        community.members.push(user._id);
+        await community.save();
+
+        user.communities.push(community._id);
+        await user.save();
+
+        return community;
+    } catch (error) {
+        console.error("Error adding member to community: ", error);
+        throw error;
+    }
+}
