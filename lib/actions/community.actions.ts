@@ -219,3 +219,56 @@ export async function removeUserFromCommunity(
         throw error;
     }
 }
+
+export async function updateCommunityInfo(
+    communityId: string,
+    name: string,
+    username: string,
+    image: string
+) {
+    try {
+        connectToDB();
+
+        const updatedCommunity = await Community.findOneAndUpdate(
+            { id: communityId },
+            { name, username, image }
+        );
+
+        if(!updatedCommunity) {
+            throw new Error("Community not found");
+        }
+
+        return updatedCommunity;
+    } catch (error) {
+        console.error("Error updating community info: ", error);
+        throw error;
+    }
+}
+
+export async function deleteCommunity(communityId: string) {
+    try {
+        connectToDB();
+
+        const deletedCommunity = await Community.findOneAndDelete({
+            id: communityId,
+        });
+
+        if (!deletedCommunity) {
+            throw new Error("Community not found");
+        }
+
+        await Thread.deleteMany({ community: deletedCommunity.id });
+
+        const updateUserPromises = communityUsers.map((user) => {
+            user.communities.pull(communityId);
+            return user.save();
+        });
+
+        await Promise.all(updateUserPromises);
+
+        return deletedCommunity;
+    } catch (error) {
+        console.error("Error deleting community: ", error);
+        throw error;
+    }
+}
